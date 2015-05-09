@@ -5,13 +5,12 @@ import java.io.{Reader, PushbackReader}
 import karmag.stumpy.clj.{Tagged, Clj}
 
 object Read {
-  private val endOfTheLine = "Nothing to read"
 
   def edn(in: Reader): Either[String, Edn] = {
     try {
       val parseResult = Clj.readEdn(new PushbackReader(in))
       if (parseResult == Clj.EOF)
-        Left(endOfTheLine)
+        Left("Nothing to read")
       else
         Right(Translate.translate(parseResult))
     } catch {
