@@ -1,7 +1,8 @@
-package karmag.stumpy
+package karmag.stumpy.read
 
 import java.io.StringReader
 
+import karmag.stumpy.{Edn, Read}
 import org.scalatest.FunSuite
 
 object TestHelper extends FunSuite {

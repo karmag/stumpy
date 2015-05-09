@@ -1,6 +1,7 @@
-package karmag.stumpy
+package karmag.stumpy.read
 
-import karmag.stumpy.TestHelper._
+import karmag.stumpy._
+import karmag.stumpy.read.TestHelper._
 import org.scalatest.FunSuite
 
 class SimpleTypes extends FunSuite {

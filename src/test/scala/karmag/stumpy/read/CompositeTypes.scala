@@ -1,7 +1,8 @@
-package karmag.stumpy
+package karmag.stumpy.read
 
+import karmag.stumpy._
+import karmag.stumpy.read.TestHelper._
 import org.scalatest.FunSuite
-import TestHelper._
 
 class CompositeTypes extends FunSuite {
 
