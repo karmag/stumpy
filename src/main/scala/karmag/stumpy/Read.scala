@@ -6,6 +6,14 @@ import karmag.stumpy.clj.{Tagged, Clj}
 
 object Read {
 
+  /**
+   * Parse EDN data into objects.
+   *
+   * If the data can't be parsed properly an error string is returned.
+   *
+   * @param in Reader
+   * @return
+   */
   def edn(in: Reader): Either[String, Edn] = {
     try {
       val parseResult = Clj.readEdn(new PushbackReader(in))
@@ -18,6 +26,17 @@ object Read {
     }
   }
 
+  /**
+   * Apply parsing until no more items can be read.
+   *
+   * If an error is encountered at any point an error string will be
+   * returned. If parsing is successful a seq of EDN objects are
+   * returned.
+   *
+   * @param in Reader
+   * @param acc Result accumulator
+   * @return
+   */
   def allEdn(in: Reader)(implicit acc: Seq[Edn] = Nil): Either[String, Seq[Edn]] = {
     val result = edn(in)
     result match {
