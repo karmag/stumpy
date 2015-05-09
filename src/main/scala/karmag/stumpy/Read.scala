@@ -1,12 +1,9 @@
 package karmag.stumpy
 
-import java.io.{Reader, PushbackReader, InputStream}
+import java.io.{Reader, PushbackReader}
 
 import clojure.core$not_empty
-import clojure.lang.Keyword
-import karmag.stumpy.clj.Clj
-
-import scala.RuntimeException
+import karmag.stumpy.clj.{Tagged, Clj}
 
 object Read {
   private val endOfTheLine = "Nothing to read"
@@ -42,15 +39,16 @@ private object Translate {
       case value: String => EdnString(value)
       case value: Character => EdnChar(value)
       case value: java.lang.Long => EdnInt(value.toLong)
-      case value: clojure.lang.BigInt => EdnInt(value.toBigInteger, true)
+      case value: clojure.lang.BigInt => EdnInt(value.toBigInteger, exact = true)
       case value: java.lang.Double => EdnFloat(value.toDouble)
-      case value: java.math.BigDecimal => EdnFloat(value, true)
+      case value: java.math.BigDecimal => EdnFloat(value, exact = true)
       case value: clojure.lang.Symbol => toSymbol(value)
       case value: clojure.lang.Keyword => toKeyword(value)
       case value: clojure.lang.IPersistentList => toList(value)
       case value: clojure.lang.IPersistentVector => toVector(value)
       case value: clojure.lang.IPersistentMap => toMap(value)
       case value: clojure.lang.IPersistentSet => toSet(value)
+      case value: karmag.stumpy.clj.Tagged => toTagged(value)
       case _ =>
         throw new scala.RuntimeException("Can't translate type: " + obj.getClass)
     }
@@ -115,6 +113,11 @@ private object Translate {
     }
 
     EdnSet(data)
+  }
+
+  def toTagged(tagged: Tagged): Edn = tagged match {
+    case Tagged(tag, value) =>
+      EdnTag(translate(tag).asInstanceOf[EdnSymbol], translate(value))
   }
 
   val get = new clojure.core$get()

@@ -32,6 +32,11 @@ class CompositeTypes extends FunSuite {
       EdnMap(Map(
         EdnKeyword("alpha") -> EdnInt(1),
         EdnSymbol("beta") -> EdnString("-"))))
+
+    assert(edn("""{1 "one", 1.0 "one.zero"}""") ===
+      EdnMap(Map(
+        EdnInt(1) -> EdnString("one"),
+        EdnFloat(1) -> EdnString("one.zero"))))
   }
 
   test("Sets") {

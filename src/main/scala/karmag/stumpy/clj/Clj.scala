@@ -6,16 +6,19 @@ import java.util
 object Clj {
   val EOF = new Object
 
+  val taggedReader = new TaggedReader
+  val uuidReader = new BuiltinReader(symbol("uuid"))
+  val instReader = new BuiltinReader(symbol("inst"))
+
   def readEdn(in: PushbackReader): Object = {
     val readers = new util.HashMap[Object, Object]()
-    readers.put(symbol("uuid"), (value: Object) => Tagged(symbol("uuid"), value))
-    readers.put(symbol("inst"), (value: Object) => Tagged(symbol("inst"), value))
+    readers.put(symbol("uuid"), uuidReader)
+    readers.put(symbol("inst"), instReader)
 
     val options = new java.util.HashMap[Object, Object]()
     options.put(keyword("eof"), EOF)
     options.put(keyword("readers"), map(readers))
-    options.put(keyword("default"),
-      (tag: Object, value: Object) => Tagged(tag, value))
+    options.put(keyword("default"), taggedReader)
 
     val reader = new clojure.edn$read
     reader.invoke(map(options), in)
@@ -35,6 +38,18 @@ object Clj {
 
   def isKeyword(obj: Object) = obj.isInstanceOf[clojure.lang.Keyword]
   def isSymbol(obj: Object) = obj.isInstanceOf[clojure.lang.Symbol]
+}
+
+class TaggedReader extends clojure.lang.AFn {
+  override def invoke(tag: Object, value: Object): Object = {
+    Tagged(tag, value)
+  }
+}
+
+class BuiltinReader(val tag: clojure.lang.Symbol) extends clojure.lang.AFn {
+  override def invoke(value: Object): Object = {
+    Tagged(tag, value)
+  }
 }
 
 case class Tagged(tag: Object, value: Object)
