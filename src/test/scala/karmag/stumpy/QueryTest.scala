@@ -34,12 +34,7 @@ class QueryTest extends FunSuite {
     assert(lookup(tagged, EdnSymbol("tag")).head === creatures)
   }
 
-  def isEdnString(edn: Edn) = {
-    edn match {
-      case _: EdnString => true
-      case _ => false
-    }
-  }
+  def isEdnString(edn: Edn) = edn.isInstanceOf[EdnString]
 
   test("Search") {
     assert(search(creatures, isEdnString).toSet ===
