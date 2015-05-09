@@ -1,7 +1,8 @@
-package karmag.stumpy
+package karmag.stumpy.query
 
-import org.scalatest.FunSuite
 import karmag.stumpy.Query._
+import karmag.stumpy._
+import org.scalatest.FunSuite
 
 class QueryTest extends FunSuite {
 
