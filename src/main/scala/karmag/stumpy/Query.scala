@@ -18,6 +18,7 @@ object Query {
    *     - EdnSet    - key is used to lookup itself
    *     - EdnList   - key must be a EdnInt, used as index
    *     - EdnVector - key must be a EdnInt, used as index
+   *     - EdnTag    - key matching on tag
    * </pre>
    *
    * @param edn The starting point
@@ -47,6 +48,7 @@ object Query {
         case int: EdnInt => vec.data.drop(int.value.toInt).headOption
         case _ => None
       }
+      case tag: EdnTag => if (key == tag.tag) Some(tag.edn) else None
       case _ => None
     }
   }

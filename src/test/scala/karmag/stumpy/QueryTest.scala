@@ -30,6 +30,8 @@ class QueryTest extends FunSuite {
       person)
 
     assert(lookup(creatures, EdnInt(10)) === None)
+
+    assert(lookup(tagged, EdnSymbol("tag")).head === creatures)
   }
 
   def isEdnString(edn: Edn) = {
