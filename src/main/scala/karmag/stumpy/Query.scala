@@ -50,4 +50,29 @@ object Query {
       case _ => None
     }
   }
+
+  /**
+   * Iterate over all EDN objects. Returns all objects satisfying
+   * the predicate function.
+   *
+   * For maps the function is applied to values, keys are not checked.
+   *
+   * @param edn Root EDN object
+   * @param f Predicate function used for filtering
+   * @return All EDN objects satisfying the predicate function
+   */
+  def search(edn: Edn, f: Edn => Boolean): Seq[Edn] = {
+    val self = if (f(edn)) List(edn) else Nil
+
+    val found = edn match {
+      case map: EdnMap => map.data.values.map(search(_, f))
+      case set: EdnSet => set.data.map(search(_, f))
+      case lst: EdnList => lst.data.map(search(_, f))
+      case vec: EdnVector => vec.data.map(search(_, f))
+      case tag: EdnTag => List(search(tag.edn, f))
+      case _ => Nil
+    }
+
+    self ++ found.fold(Nil)(_ ++ _)
+  }
 }

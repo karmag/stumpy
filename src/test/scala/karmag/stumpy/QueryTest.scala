@@ -7,7 +7,7 @@ class QueryTest extends FunSuite {
 
   val person = EdnMap(Map(
     EdnKeyword("name") -> EdnString("karl"),
-    EdnKeyword("has-computer") -> EdnBool(true)))
+    EdnKeyword("has-computer") -> EdnBool(value = true)))
 
   val dog = EdnMap(Map(
     EdnKeyword("breed") -> EdnString("small"),
@@ -15,6 +15,8 @@ class QueryTest extends FunSuite {
       EdnSet(Set(EdnString("cars"), EdnString("balls")))))
 
   val creatures = EdnList(List(person, dog))
+
+  val tagged = EdnTag(EdnSymbol("tag"), creatures)
 
   test("Lookup") {
     assert(lookup(person, EdnKeyword("name")).head === EdnString("karl"))
@@ -28,5 +30,20 @@ class QueryTest extends FunSuite {
       person)
 
     assert(lookup(creatures, EdnInt(10)) === None)
+  }
+
+  def isEdnString(edn: Edn) = {
+    edn match {
+      case _: EdnString => true
+      case _ => false
+    }
+  }
+
+  test("Search") {
+    assert(search(creatures, isEdnString).toSet ===
+      Set(EdnString("karl"), EdnString("small"), EdnString("cars"), EdnString("balls")))
+
+    assert(search(tagged, isEdnString).toSet ===
+      Set(EdnString("karl"), EdnString("small"), EdnString("cars"), EdnString("balls")))
   }
 }
