@@ -23,5 +23,3 @@ case class EdnSet(data: Set[Edn]) extends Edn
 
 // meta
 case class EdnTag(tag: EdnSymbol, edn: Edn) extends Edn
-case class EdnComment(text: String) extends Edn
-case class EdnDiscard(discarded: Edn) extends Edn

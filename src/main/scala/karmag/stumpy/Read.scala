@@ -2,7 +2,6 @@ package karmag.stumpy
 
 import java.io.{Reader, PushbackReader}
 
-import clojure.core$not_empty
 import karmag.stumpy.clj.{Tagged, Clj}
 
 object Read {
@@ -121,5 +120,5 @@ private object Translate {
   }
 
   val get = new clojure.core$get()
-  val notEmpty = new core$not_empty()
+  val notEmpty = new clojure.core$not_empty()
 }
