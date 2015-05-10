@@ -1,7 +1,7 @@
 package karmag.stumpy
 
 // base
-sealed class Edn()
+sealed abstract class Edn()
 
 // primitives
 case class EdnNil() extends Edn
