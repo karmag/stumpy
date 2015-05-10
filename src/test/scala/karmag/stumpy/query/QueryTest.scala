@@ -44,4 +44,9 @@ class QueryTest extends FunSuite {
     assert(search(tagged, isEdnString).toSet ===
       Set(EdnString("karl"), EdnString("small"), EdnString("cars"), EdnString("balls")))
   }
+
+  test("'as' casting") {
+    assert(as[EdnMap](person) === Some(person))
+    assert(as[EdnList](person) === None)
+  }
 }

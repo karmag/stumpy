@@ -1,5 +1,7 @@
 package karmag.stumpy
 
+import scala.reflect.ClassTag
+
 object Query {
 
   /**
@@ -76,5 +78,20 @@ object Query {
     }
 
     self ++ found.fold(Nil)(_ ++ _)
+  }
+
+  /**
+   * Attempts to cast the object returning None on failure.
+   *
+   * @param obj The object to cast
+   * @tparam T New type
+   * @return
+   */
+  def as[T : ClassTag](obj: AnyRef): Option[T] = {
+    val ct = implicitly[ClassTag[T]]
+    obj match {
+      case ct(x) => Some(x)
+      case _ => None
+    }
   }
 }
